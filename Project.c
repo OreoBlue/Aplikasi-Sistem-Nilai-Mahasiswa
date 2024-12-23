@@ -15,7 +15,7 @@ struct mahasiswa
 
 
 int main(){
-    printf("Sela\n");
+    printf("Hello World!")
 
 
 
