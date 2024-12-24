@@ -1,4 +1,5 @@
 # Aplikasi-Sistem-Nilai-Mahasiswa
+Repo ini berisi aplikasi berbasis terminal untuk mengelola data nilai mahasiswa, termasuk fitur menambah, menghapus, mencari, dan menampilkan data. Proyek ini menggunakan bahasa C dengan implementasi algoritma sorting dan searching untuk efisiensi pengelolaan data.
 ## Pengenalan
 Dibuat oleh Kelompok 1 Kelas 1A:
 - Naail Safwan Saleh
