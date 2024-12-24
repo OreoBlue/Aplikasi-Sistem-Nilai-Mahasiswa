@@ -8,7 +8,7 @@ int main() {
     system("gcc homePage.c -o homePage");
     
     // Perintah untuk menjalankan file yang sudah dikompilasi
-    //system("./file_lain"); // Untuk Linux/MacOS
+    //system("./homePage"); // Untuk Linux/MacOS
     system("homePage.exe"); // Untuk Windows
 
     return 0;
