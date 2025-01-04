@@ -16,9 +16,8 @@ Dibuat oleh Kelompok 1 Kelas 1A:
   Khusus untuk Admin Akademik/Dosen:
 - Kelola Data Mahasiswa (Create, Read, Update, Delete)
 - Pencarian dan Penyortiran Data Mahasiswa (Searching and Sorting)
-- Statistika Data Mahasiswa (Rata-rata nilai, Distribusi Grade, TOP 3 Mahasiswa)
-
-  Khusus untuk Mahasiswa
+- Statistika Data Mahasiswa (Rata-rata nilai, Distribusi Grade, TOP 3 Mahasiswa)<br/> <br/>
+  Khusus untuk Mahasiswa:
 - Login
 - Lihat list nilai-nilai Tugas, UAS, UTS, Nilai Akhir, dan Grade
 
