@@ -1,8 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>  // Library untuk fungsi input-output
+#include <stdlib.h> // Library untuk fungsi exit
 #include <unistd.h> // Library untuk fungsi sleep
 #include <string.h> // Library untuk fungsi strcpy
 
+// Struktur data Mahasiswa
 typedef struct {
     int nim;
     char nama[50];
@@ -16,14 +17,17 @@ typedef struct {
 
 Mahasiswa mhs;
 
+// Fungsi yang digunakan
 void kelolaData(const char *filename);
 void editData(const char *filename);
 void hapusData(const char *filename);
 
+// Fungsi dimulai dari sini
 void homepage() {
     char *filename = "DataMahasiswa.dat";
     int pilihan = 0;
 
+    // Menu utama menggunakan label
     homepageMenu:
     printf("\n=== Selamat Datang di Aplikasi Nilai Mahasiswa! ===\n");
     printf("1. Kelola Nilai Mahasiswa\n");
@@ -36,12 +40,12 @@ void homepage() {
         printf("Input tidak valid! Harap masukkan angka 1-4.\n");
         while (getchar() != '\n');
         pilihan = 0;
-        goto homepageMenu;
+        goto homepageMenu; // Kembali ke menu utama dengan label
     }
 
     if (pilihan == 1){
-        system("cls");
-        kelolaData(filename);
+        system("cls"); // Hapus layar
+        kelolaData(filename); // Panggil fungsi kelola data
     }
     else if (pilihan == 2)
     {
@@ -57,7 +61,7 @@ void homepage() {
     }
     else if (pilihan == 4){
         printf("\nTerima kasih telah menggunakan aplikasi ini!\n");
-        sleep(3);
+        sleep(3); // Delay 3 detik
     }
     else {
         printf("Pilihan tidak valid! Harap masukkan angka 1-4.\n");

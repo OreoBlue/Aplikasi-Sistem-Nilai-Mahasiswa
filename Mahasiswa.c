@@ -18,6 +18,7 @@ typedef struct {
 
 
 Mahasiswa mhs;
+
 int currentNIM;
 
 void loginMahasiswa(const char *filename) {
