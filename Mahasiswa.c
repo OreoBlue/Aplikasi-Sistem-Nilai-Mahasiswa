@@ -28,6 +28,13 @@ void loginMahasiswa(const char *filename) {
         exit(1);
     }
 
+    printf("         ____\n");
+    printf("        /   /\\\n");
+    printf("       /   /  \\\n");
+    printf("      /___/____\\\n");
+    printf("      \\   \\    /\n");
+    printf("       \\   \\  /\n");
+    printf("        \\___\\/\n");
     printf("\n=== Login Mahasiswa ===\n");
     printf("Masukkan NIM Anda: ");
     scanf("%d", &currentNIM);
@@ -91,6 +98,7 @@ void lihatNilaiMahasiswa(const char *filename) {
     }
 
     // Tampilkan nilai berdasarkan mata kuliah yang dipilih
+
     file = fopen(filename, "r");
     while (fscanf(file, "%d,%49[^,],%49[^,],%f,%f,%f,%f,%c\n", &mhs.nim, mhs.nama, mhs.matkul, &mhs.tugas, &mhs.uts, &mhs.uas, &mhs.nilaiAkhir, &mhs.grade) != EOF) {
         if (mhs.nim == currentNIM && strcmp(mhs.matkul, matkulList[pilihan - 1]) == 0) {
@@ -112,8 +120,8 @@ void homepageMahasiswa(const char *filename) {
 
     homepageMenu:
     system("cls");
-    printf("\n=== Selamat Datang di Portal Mahasiswa ===\n");
-    printf("1. Lihat Nilai Anda\n");
+    printf("\n=== Selamat Datang di EduScore Mahasiswa! ===\n");
+    printf("1. Lihat Nilai\n");
     printf("2. Keluar\n");
     printf("Masukkan pilihan (1-2): ");
 
@@ -141,6 +149,7 @@ void homepageMahasiswa(const char *filename) {
 }
 
 int main() {
+    system("cls");
     const char *filename = "DataMahasiswa.dat";
     loginMahasiswa(filename);
     homepageMahasiswa(filename);
