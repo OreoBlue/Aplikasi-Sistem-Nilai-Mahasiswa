@@ -17,8 +17,9 @@ typedef struct {
     char grade;
 } Mahasiswa;
 
+
 typedef struct {
-    int nip;
+    char username[50];
     char password[50];
 } Admin;
 
@@ -32,10 +33,13 @@ void kelolaData(const char *filename);
 void editData(const char *filename);
 void hapusData(const char *filename);
 
+// Fungsi yang digunakan untuk Pencarian Data Mahasiswa
 void pencarianData(const char *filename);
 
+// Fungsi yang digunakan untuk Statistika Data Mahasiswa
 void statistikaData(const char *filename);
 
+// Fungsi yang digunakan untuk Login dan Homepage
 void loginPage();
 void homepage();
 void registrasi();
@@ -54,23 +58,23 @@ void loginPage() {
     scanf("%d", &pilihan);
 
     if (pilihan == 1) {
-        int nip;
+        char username[50];
         char password[50];
         FILE *file = fopen("LoginAdmin.dat", "r");
-        if (file == NULL) {
+        if (!file) {
             printf("Gagal membuka file!\n");
             goto loginMenu;
         }
 
         system("cls");
-        printf("Masukkan NIP: ");
-        scanf("%d", &nip);
+        printf("Masukkan Username: ");
+        scanf("%s", username);
         printf("Masukkan Password: ");
         scanf("%s", password);
 
         int found = 0;
-        while (fscanf(file, "%d %49s", &admin.nip, admin.password) != EOF) {
-            if (admin.nip == nip && strcmp(admin.password, password) == 0) {
+        while (fscanf(file, "%49s %49s", admin.username, admin.password) != EOF) {
+            if (strcmp(admin.username, username) == 0 && strcmp(admin.password, password) == 0) {
                 found = 1;
                 break;
             }
@@ -80,11 +84,10 @@ void loginPage() {
         if (found) {
             printf("Login berhasil!\n");
             sleep(2);
-            system("cls");
             homepage();
         } else {
             system("cls");
-            printf("NIP atau Password salah!\n");
+            printf("Username atau Password salah!\n");
             sleep(2);
             goto loginMenu;
         }
@@ -105,18 +108,18 @@ void loginPage() {
 
 void registrasi() {
     FILE *file = fopen("LoginAdmin.dat", "a");
-    if (file == NULL) {
+    if (!file) {
         printf("Gagal membuka file!\n");
         return;
     }
 
     system("cls");
-    printf("Masukkan NIP: ");
-    scanf("%d", &admin.nip);
+    printf("Masukkan Username: ");
+    scanf("%s", admin.username);
     printf("Masukkan Password: ");
     scanf("%s", admin.password);
 
-    fprintf(file, "%d %s\n", admin.nip, admin.password);
+    fprintf(file, "%s %s\n", admin.username, admin.password);
     fclose(file);
     printf("Registrasi berhasil!\n");
     sleep(2);
@@ -179,7 +182,7 @@ void kelolaData(const char *filename) {
     int pilihan = 0;
 
     kelolaDataMenu:
-    printf("\n=== Kelola Nilai Mahasiswa ===\n");
+    printf("\n=== Kelola Data Mahasiswa ===\n");
     printf("1. Tambah Data\n");
     printf("2. Lihat Data\n");
     printf("3. Edit Data\n");
@@ -547,7 +550,7 @@ void pencarianData(const char *filename) {
     Mahasiswa mhs[100];
     int count = 0;
 
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "r"); //
     if (file == NULL) {
         printf("Gagal membuka file!\n");
         return;
@@ -566,8 +569,8 @@ void pencarianData(const char *filename) {
     printf("Masukkan pilihan (1-3): ");
     scanf("%d", &pilihan);
 
-    if (pilihan == 1) {
-        int nim;
+    if (pilihan == 1) { // Searching Data
+        int nim; // Cari Data berdasarkan NIM
         printf("Masukkan NIM: ");
         scanf("%d", &nim);
         printf("\n=== Hasil Pencarian ===\n");
@@ -586,16 +589,16 @@ void pencarianData(const char *filename) {
             printf("Data tidak ditemukan!\n");
         }
         goto pencarianDataMenu;
-    } else if (pilihan == 2) {
+    } else if (pilihan == 2) { // Sorting Data
         system("cls");
-        printf("\n1. Nama (Ascending)\n");
-        printf("2. Nama (Descending)\n");
-        printf("3. Nilai Akhir (Ascending)\n");
-        printf("4. Nilai Akhir (Descending)\n");
+        printf("\n1. Nama (Ascending)(A-Z)\n");
+        printf("2. Nama (Descending)(Z-A)\n");
+        printf("3. Nilai Akhir (Ascending)(0-100)\n");
+        printf("4. Nilai Akhir (Descending)(100-0)\n");
         printf("Masukkan pilihan (1-4): ");
         scanf("%d", &pilihan);
 
-        if (pilihan == 1) {
+        if (pilihan == 1) { // Ascending Nama
             for (int i = 0; i < count - 1; i++) {
                 for (int j = i + 1; j < count; j++) {
                     if (strcmp(mhs[i].nama, mhs[j].nama) > 0) {
@@ -605,7 +608,7 @@ void pencarianData(const char *filename) {
                     }
                 }
             }
-        } else if (pilihan == 2) {
+        } else if (pilihan == 2) { // Descending Nama
             for (int i = 0; i < count - 1; i++) {
                 for (int j = i + 1; j < count; j++) {
                     if (strcmp(mhs[i].nama, mhs[j].nama) < 0) {
@@ -615,7 +618,7 @@ void pencarianData(const char *filename) {
                     }
                 }
             }
-        } else if (pilihan == 3) {
+        } else if (pilihan == 3) { // Ascending Nilai Akhir
             for (int i = 0; i < count - 1; i++) {
                 for (int j = i + 1; j < count; j++) {
                     if (mhs[i].nilaiAkhir > mhs[j].nilaiAkhir) {
@@ -625,7 +628,7 @@ void pencarianData(const char *filename) {
                     }
                 }
             }
-        } else if (pilihan == 4) {
+        } else if (pilihan == 4) { // Descending Nilai Akhir
             for (int i = 0; i < count - 1; i++) {
                 for (int j = i + 1; j < count; j++) {
                     if (mhs[i].nilaiAkhir < mhs[j].nilaiAkhir) {
@@ -716,6 +719,7 @@ void statistikaData(const char *filename) {
         printf("D: %d\n", gradeD);
         printf("E: %d\n", gradeE);
         goto statistikaDataMenu;
+    
     } else if (pilihan == 3) {
         system("cls");
         printf("Kembali ke menu utama...\n");
