@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
+#include <stdio.h> // Library untuk fungsi input-output
+#include <stdlib.h> // Library untuk fungsi exit
+#include <unistd.h> // Library untuk fungsi sleep
+#include <string.h> // Library untuk fungsi strcpy
 
 #define MAX_MATAKULIAH 6
 
