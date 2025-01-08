@@ -82,6 +82,7 @@ void loginPage() {
         fclose(file);
 
         if (found) {
+            system("cls");
             printf("Login berhasil!\n");
             sleep(2);
             homepage();
