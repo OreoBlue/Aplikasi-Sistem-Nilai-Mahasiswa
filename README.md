@@ -14,6 +14,7 @@ Dibuat oleh Kelompok 1 Kelas 1A:
   Proyek ini juga merupakan implementasi nyata dari pembelajaran Algoritma dan Pemrograman, serta mendukung pengembangan keterampilan pemrograman praktis bagi developer/mahasiswa. Melalui aplikasi ini, pengguna dapat mengelola data nilai mahasiswa dengan lebih efisien dan terorganisir.
 ## Fitur-Fitur Utama
   Khusus untuk Admin Akademik/Dosen:
+- Login
 - Kelola Data Mahasiswa (Create, Read, Update, Delete)
 - Pencarian dan Penyortiran Data Mahasiswa (Searching and Sorting)
 - Statistika Data Mahasiswa (Rata-rata nilai, Distribusi Grade, TOP 3 Mahasiswa)<br/> <br/>
