@@ -4,14 +4,16 @@
 #include <string.h> // Library untuk fungsi strcpy
 
 int main(){
+    system("cls");
     int pilihan;
 
     homePage:
+    system("cls");
     printf("\n=== Selamat Datang di EduScore! ===\n");
     printf("\nPilih versi \n");
-    printf("1. Admin\n");
-    printf("2. Dosen\n");
-    printf("3. Mahasiswa\n");
+    printf("1. Admin/Dosen\n");
+    printf("2. Mahasiswa\n");
+    printf("3. Keluar\n");
     printf("Masukkan pilihan (1-3): ");
     scanf("%d", &pilihan);
 
@@ -20,13 +22,15 @@ int main(){
         printf("Membuka Admin...\n");
         system("gcc Admin.c -o Admin");
         system("Admin.exe");
-    case 2:
-        printf("Membuka Dosen...\n");
         break;
-    case 3:
+    case 2:
         printf("Membuka Mahasiswa...\n");
         system("gcc Mahasiswa.c -o Mahasiswa");
         system("Mahasiswa.exe");
+        break;
+    case 3:
+        printf("Terima kasih telah menggunakan aplikasi ini!\n");
+        sleep(3); // Delay 3 detik
     default:
         printf("Pilihan tidak valid! Harap masukkan angka 1-3.\n");
         goto homePage;

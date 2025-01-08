@@ -17,7 +17,13 @@ typedef struct {
     char grade;
 } Mahasiswa;
 
+typedef struct {
+    int nip;
+    char password[50];
+} Admin;
+
 Mahasiswa mhs;
+Admin admin;
 
 int currentNIM;
 
@@ -26,9 +32,97 @@ void kelolaData(const char *filename);
 void editData(const char *filename);
 void hapusData(const char *filename);
 
+void pencarianData(const char *filename);
 
+void statistikaData(const char *filename);
+
+void loginPage();
+void homepage();
+void registrasi();
 
 // Fungsi dimulai dari sini
+void loginPage() {
+    int pilihan = 0;
+
+    loginMenu:
+    system("cls");
+    printf("\n=== Login Page ===\n");
+    printf("1. Login Admin\n");
+    printf("2. Registrasi\n");
+    printf("3. Keluar\n");
+    printf("Masukkan pilihan (1-3): ");
+    scanf("%d", &pilihan);
+
+    if (pilihan == 1) {
+        int nip;
+        char password[50];
+        FILE *file = fopen("LoginAdmin.dat", "r");
+        if (file == NULL) {
+            printf("Gagal membuka file!\n");
+            goto loginMenu;
+        }
+
+        system("cls");
+        printf("Masukkan NIP: ");
+        scanf("%d", &nip);
+        printf("Masukkan Password: ");
+        scanf("%s", password);
+
+        int found = 0;
+        while (fscanf(file, "%d %49s", &admin.nip, admin.password) != EOF) {
+            if (admin.nip == nip && strcmp(admin.password, password) == 0) {
+                found = 1;
+                break;
+            }
+        }
+        fclose(file);
+
+        if (found) {
+            printf("Login berhasil!\n");
+            sleep(2);
+            system("cls");
+            homepage();
+        } else {
+            system("cls");
+            printf("NIP atau Password salah!\n");
+            sleep(2);
+            goto loginMenu;
+        }
+    } else if (pilihan == 2) {
+        system("cls");
+        registrasi();
+        goto loginMenu;
+    } else if (pilihan == 3) {
+        printf("Keluar dari aplikasi...\n");
+        sleep(2);
+        exit(0);
+    } else {
+        printf("Pilihan tidak valid! Harap masukkan angka 1-3.\n");
+        sleep(2);
+        goto loginMenu;
+    }
+}
+
+void registrasi() {
+    FILE *file = fopen("LoginAdmin.dat", "a");
+    if (file == NULL) {
+        printf("Gagal membuka file!\n");
+        return;
+    }
+
+    system("cls");
+    printf("Masukkan NIP: ");
+    scanf("%d", &admin.nip);
+    printf("Masukkan Password: ");
+    scanf("%s", admin.password);
+
+    fprintf(file, "%d %s\n", admin.nip, admin.password);
+    fclose(file);
+    printf("Registrasi berhasil!\n");
+    sleep(2);
+    system("cls");
+}
+
 void homepage() {
     char *filename = "DataMahasiswa.dat";
     int pilihan = 0;
@@ -62,12 +156,12 @@ void homepage() {
     }
     else if (pilihan == 2){
         system("cls");
-
+        pencarianData(filename);
         goto homepageMenu;
     }
     else if (pilihan == 3){
-        printf("Membuka Statistika Data Mahasiswa...\n\n");
-        // Panggil fungsi statistika data mahasiswa
+        system("cls");
+        statistikaData(filename);
         goto homepageMenu;
     }
     else if (pilihan == 4){
@@ -164,6 +258,7 @@ void kelolaData(const char *filename) {
         fprintf(file, "%d,%s,%s,%.2f,%.2f,%.2f,%.2f,%c\n", mhs.nim, mhs.nama, mhs.matkul, mhs.tugas, mhs.uts, mhs.uas, mhs.nilaiAkhir, mhs.grade);
         fclose(file);
         system("cls");
+        printf("Data berhasil ditambahkan!\n");
     } else if (pilihan == 2) { 
         system("cls");
         FILE *file = fopen(filename, "r");
@@ -205,14 +300,22 @@ void editData(const char *filename) {
         return;
     }
 
+    rewind(file); // Reset file pointer ke awal untuk pencarian data
+
     Mahasiswa mhs[100]; // Array untuk menyimpan data
     int count = 0;
 
-    // Membaca semua data dari file
-    while (fscanf(file, "%d,%49[^,],%49[^,],%f,%f,%f,%f,%c\n",
-                  &mhs[count].nim, mhs[count].nama, mhs[count].matkul,
-                  &mhs[count].tugas, &mhs[count].uts, &mhs[count].uas,
-                  &mhs[count].nilaiAkhir, &mhs[count].grade) != EOF) {
+    // Tampilkan data mahasiswa
+    system("cls");
+    printf("\n=== Data Nilai Mahasiswa ===\n");
+    printf("| %-10s | %-20s | %-20s | %-5s | %-5s | %-5s | %-5s | %-5s |\n",
+           "NIM", "Nama", "Matkul", "Tugas", "UTS", "UAS", "NA", "Grade");
+    printf("---------------------------------------------------------------------------------------------\n");
+
+    while (fscanf(file, "%d,%49[^,],%49[^,],%f,%f,%f,%f,%c\n", &mhs[count].nim, mhs[count].nama, mhs[count].matkul, 
+                  &mhs[count].tugas, &mhs[count].uts, &mhs[count].uas, &mhs[count].nilaiAkhir, &mhs[count].grade) != EOF) {
+        printf("| %-10d | %-20s | %-20s | %-5.2f | %-5.2f | %-5.2f | %-5.2f | %-5c |\n", 
+               mhs[count].nim, mhs[count].nama, mhs[count].matkul, mhs[count].tugas, mhs[count].uts, mhs[count].uas, mhs[count].nilaiAkhir, mhs[count].grade);
         count++;
     }
 
@@ -221,6 +324,7 @@ void editData(const char *filename) {
     scanf("%d", &nim);
 
     // Menampilkan data berdasarkan NIM
+    system("cls");
     printf("\n=== Data Nilai Mahasiswa ===\n");
     printf("| %-10s | %-20s | %-20s | %-5s | %-5s | %-5s | %-5s | %-5s |\n", 
            "NIM", "Nama", "Mata Kuliah", "Tugas", "UTS", "UAS", "Akhir", "Grade");
@@ -236,6 +340,7 @@ void editData(const char *filename) {
     }
 
     if (!found) {
+        system("cls");
         printf("Data mahasiswa dengan NIM %d tidak ditemukan!\n", nim);
         fclose(file);
         return;
@@ -295,6 +400,7 @@ void editData(const char *filename) {
     }
 
     if (!found) {
+        system("cls");
         printf("Mata kuliah %s tidak ditemukan untuk NIM %d!\n", matkulDipilih, nim);
         fclose(file);
         return;
@@ -310,6 +416,7 @@ void editData(const char *filename) {
     }
 
     fclose(file);
+    system("cls");
     printf("Data berhasil diperbarui!\n");
 }
 
@@ -321,6 +428,7 @@ void hapusData(const char *filename) {
     }
 
     // Tampilkan data mahasiswa
+    system("cls");
     printf("\n=== Data Nilai Mahasiswa ===\n");
     printf("| %-10s | %-20s | %-20s | %-5s | %-5s | %-5s | %-5s | %-5s |\n", "NIM", "Nama", "Mata Kuliah", "Tugas", "UTS", "UAS", "Akhir", "Grade");
     printf("---------------------------------------------------------------------------------------------\n");
@@ -338,6 +446,7 @@ void hapusData(const char *filename) {
     printf("\nMasukkan NIM mahasiswa yang ingin dihapus: ");
     scanf("%d", &nim);
 
+    system("cls");
     printf("Pilih Mata Kuliah yang diambil:\n");
     printf("1. Matematika Teknik\n");
     printf("2. Elektronika\n");
@@ -408,8 +517,10 @@ void hapusData(const char *filename) {
     if (found) {
         printf("\nMenghapus Data...\n");
         sleep(2); // Delay 2 detik
+        system("cls");
         printf("Hapus Data Berhasil\n");
     } else {
+        system("cls");
         printf("Data tidak ditemukan untuk NIM %d dan Mata Kuliah %s.\n", nim, mataKuliah);
     }
 
@@ -422,9 +533,201 @@ void hapusData(const char *filename) {
     rename("TempDataMahasiswa.dat", filename);
 }
 
+void tampilkanDataMahasiswa(const Mahasiswa *mhs, int count) {
+    printf("\n=== Data Nilai Mahasiswa ===\n");
+    printf("| %-10s | %-20s | %-20s | %-5s | %-5s | %-5s | %-5s | %-5s |\n", "NIM", "Nama", "Mata Kuliah", "Tugas", "UTS", "UAS", "Akhir", "Grade");
+    printf("---------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < count; i++) {
+        printf("| %-10d | %-20s | %-20s | %-5.2f | %-5.2f | %-5.2f | %-5.2f | %-5c |\n", mhs[i].nim, mhs[i].nama, mhs[i].matkul, mhs[i].tugas, mhs[i].uts, mhs[i].uas, mhs[i].nilaiAkhir, mhs[i].grade);
+    }
+}
+
+void pencarianData(const char *filename) {
+    int pilihan = 0;
+    Mahasiswa mhs[100];
+    int count = 0;
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Gagal membuka file!\n");
+        return;
+    }
+
+    while (fscanf(file, "%d,%49[^,],%49[^,],%f,%f,%f,%f,%c\n", &mhs[count].nim, mhs[count].nama, mhs[count].matkul, &mhs[count].tugas, &mhs[count].uts, &mhs[count].uas, &mhs[count].nilaiAkhir, &mhs[count].grade) != EOF) {
+        count++;
+    }
+    fclose(file);
+
+    pencarianDataMenu:
+    printf("\n=== Pencarian Data Mahasiswa ===\n");
+    printf("\n1. Cari Data\n");
+    printf("2. Urutkan Data\n");
+    printf("3. Keluar\n");
+    printf("Masukkan pilihan (1-3): ");
+    scanf("%d", &pilihan);
+
+    if (pilihan == 1) {
+        int nim;
+        printf("Masukkan NIM: ");
+        scanf("%d", &nim);
+        printf("\n=== Hasil Pencarian ===\n");
+        int found = 0;
+        for (int i = 0; i < count; i++) {
+            if (mhs[i].nim == nim) {
+                if (!found) {
+                    printf("| %-10s | %-20s | %-20s | %-5s | %-5s | %-5s | %-5s | %-5s |\n", "NIM", "Nama", "Mata Kuliah", "Tugas", "UTS", "UAS", "Akhir", "Grade");
+                    printf("---------------------------------------------------------------------------------------------\n");
+                    found = 1;
+                }
+                printf("| %-10d | %-20s | %-20s | %-5.2f | %-5.2f | %-5.2f | %-5.2f | %-5c |\n", mhs[i].nim, mhs[i].nama, mhs[i].matkul, mhs[i].tugas, mhs[i].uts, mhs[i].uas, mhs[i].nilaiAkhir, mhs[i].grade);
+            }
+        }
+        if (!found) {
+            printf("Data tidak ditemukan!\n");
+        }
+        goto pencarianDataMenu;
+    } else if (pilihan == 2) {
+        system("cls");
+        printf("\n1. Nama (Ascending)\n");
+        printf("2. Nama (Descending)\n");
+        printf("3. Nilai Akhir (Ascending)\n");
+        printf("4. Nilai Akhir (Descending)\n");
+        printf("Masukkan pilihan (1-4): ");
+        scanf("%d", &pilihan);
+
+        if (pilihan == 1) {
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = i + 1; j < count; j++) {
+                    if (strcmp(mhs[i].nama, mhs[j].nama) > 0) {
+                        Mahasiswa temp = mhs[i];
+                        mhs[i] = mhs[j];
+                        mhs[j] = temp;
+                    }
+                }
+            }
+        } else if (pilihan == 2) {
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = i + 1; j < count; j++) {
+                    if (strcmp(mhs[i].nama, mhs[j].nama) < 0) {
+                        Mahasiswa temp = mhs[i];
+                        mhs[i] = mhs[j];
+                        mhs[j] = temp;
+                    }
+                }
+            }
+        } else if (pilihan == 3) {
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = i + 1; j < count; j++) {
+                    if (mhs[i].nilaiAkhir > mhs[j].nilaiAkhir) {
+                        Mahasiswa temp = mhs[i];
+                        mhs[i] = mhs[j];
+                        mhs[j] = temp;
+                    }
+                }
+            }
+        } else if (pilihan == 4) {
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = i + 1; j < count; j++) {
+                    if (mhs[i].nilaiAkhir < mhs[j].nilaiAkhir) {
+                        Mahasiswa temp = mhs[i];
+                        mhs[i] = mhs[j];
+                        mhs[j] = temp;
+                    }
+                }
+            }
+        } else {
+            system("cls");
+            printf("Pilihan tidak valid! Harap masukkan angka 1-4.\n");
+            goto pencarianDataMenu;
+        }
+
+        system("cls");
+        tampilkanDataMahasiswa(mhs, count);
+        goto pencarianDataMenu;
+    } else if (pilihan == 3) {
+        system("cls");
+        printf("Kembali ke menu utama...\n");
+    } else {
+        system("cls");
+        printf("Pilihan tidak valid! Harap masukkan angka 1-3.\n");
+        goto pencarianDataMenu;
+    }
+}
+
+void statistikaData(const char *filename) {
+    int pilihan = 0;
+    Mahasiswa mhs[100];
+    int count = 0;
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Gagal membuka file!\n");
+        return;
+    }
+
+    while (fscanf(file, "%d,%49[^,],%49[^,],%f,%f,%f,%f,%c\n", &mhs[count].nim, mhs[count].nama, mhs[count].matkul, &mhs[count].tugas, &mhs[count].uts, &mhs[count].uas, &mhs[count].nilaiAkhir, &mhs[count].grade) != EOF) {
+        count++;
+    }
+    fclose(file);
+
+    statistikaDataMenu:
+    printf("\n=== Statistika Data Mahasiswa ===\n");
+    printf("1. Nilai Tertinggi dan Terendah\n");
+    printf("2. Distribusi Grade\n");
+    printf("3. Kembali ke Menu Utama\n");
+    printf("Masukkan pilihan (1-3): ");
+    scanf("%d", &pilihan);
+
+    if (pilihan == 1) {
+        system("cls");
+        if (count == 0) {
+            printf("Tidak ada data mahasiswa.\n");
+            goto statistikaDataMenu;
+        }
+        float nilaiTertinggi = mhs[0].nilaiAkhir;
+        float nilaiTerendah = mhs[0].nilaiAkhir;
+        for (int i = 1; i < count; i++) {
+            if (mhs[i].nilaiAkhir > nilaiTertinggi) {
+                nilaiTertinggi = mhs[i].nilaiAkhir;
+            }
+            if (mhs[i].nilaiAkhir < nilaiTerendah) {
+                nilaiTerendah = mhs[i].nilaiAkhir;
+            }
+        }
+        printf("Nilai Tertinggi: %.2f\n", nilaiTertinggi);
+        printf("Nilai Terendah: %.2f\n", nilaiTerendah);
+        goto statistikaDataMenu;
+    } else if (pilihan == 2) {
+        system("cls");
+        int gradeA = 0, gradeB = 0, gradeC = 0, gradeD = 0, gradeE = 0;
+        for (int i = 0; i < count; i++) {
+            switch (mhs[i].grade) {
+                case 'A': gradeA++; break;
+                case 'B': gradeB++; break;
+                case 'C': gradeC++; break;
+                case 'D': gradeD++; break;
+                case 'E': gradeE++; break;
+            }
+        }
+        printf("Distribusi Grade:\n");
+        printf("A: %d\n", gradeA);
+        printf("B: %d\n", gradeB);
+        printf("C: %d\n", gradeC);
+        printf("D: %d\n", gradeD);
+        printf("E: %d\n", gradeE);
+        goto statistikaDataMenu;
+    } else if (pilihan == 3) {
+        system("cls");
+        printf("Kembali ke menu utama...\n");
+    } else {
+        system("cls");
+        printf("Pilihan tidak valid! Harap masukkan angka 1-3.\n");
+        goto statistikaDataMenu;
+    }
+}
+
 int main() {
     system("cls");
-    const char *filename = "DataMahasiswa.Dat";
-    homepage();
+    loginPage();
     return 0;
 }
