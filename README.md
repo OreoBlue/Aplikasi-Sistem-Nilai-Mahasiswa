@@ -17,7 +17,7 @@ Dibuat oleh Kelompok 1 Kelas 1A:
 - Login
 - Kelola Data Mahasiswa (Create, Read, Update, Delete)
 - Pencarian dan Penyortiran Data Mahasiswa (Searching and Sorting)
-- Statistika Data Mahasiswa (Rata-rata nilai, Distribusi Grade)<br/> <br/>
+- Statistika Data Mahasiswa (Nilai Tertinggi/Terendah, Distribusi Grade)<br/> <br/>
 
   Khusus untuk Mahasiswa:
 - Login
