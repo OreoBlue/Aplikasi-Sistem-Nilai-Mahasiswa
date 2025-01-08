@@ -689,16 +689,22 @@ void statistikaData(const char *filename) {
         }
         float nilaiTertinggi = mhs[0].nilaiAkhir;
         float nilaiTerendah = mhs[0].nilaiAkhir;
+        char namaTertinggi[50], namaTerendah[50];
+        strcpy(namaTertinggi, mhs[0].nama);
+        strcpy(namaTerendah, mhs[0].nama);
+
         for (int i = 1; i < count; i++) {
             if (mhs[i].nilaiAkhir > nilaiTertinggi) {
                 nilaiTertinggi = mhs[i].nilaiAkhir;
+                strcpy(namaTertinggi, mhs[i].nama);
             }
             if (mhs[i].nilaiAkhir < nilaiTerendah) {
                 nilaiTerendah = mhs[i].nilaiAkhir;
+                strcpy(namaTerendah, mhs[i].nama);
             }
         }
-        printf("Nilai Tertinggi: %.2f\n", nilaiTertinggi);
-        printf("Nilai Terendah: %.2f\n", nilaiTerendah);
+        printf("Nilai Tertinggi: %.2f (Nama: %s)\n", nilaiTertinggi, namaTertinggi);
+        printf("Nilai Terendah: %.2f (Nama: %s)\n", nilaiTerendah, namaTerendah);
         goto statistikaDataMenu;
     } else if (pilihan == 2) {
         system("cls");
